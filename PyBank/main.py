@@ -3,59 +3,43 @@ import csv
 
 pybank=os.path.join("Resources","budget_data.csv")
 
-#Months dictionary
-months = []
-
-#Profit dictionary
-profitloss = []
-
-#Change in Profit dictionary
-profitchange = []
-
-#Start point for Total Profit/Losses
-total = 0
-
-#Defined function to calculate change in monthly Profit/losses
-def avgchange (startPoint,currentPoint):
-    return((currentPoint)-(startPoint))
-
 #Open and read csv
 with open(pybank,newline="") as csvfile:
-    csvreader = csv.DictReader(csvfile, delimiter=",")
+    csvreader = csv.reader(csvfile, delimiter=",")
+
+    next(csvreader)
+
+    #Months dictionary
+    months = []
+
+    #Profit dictionary
+    profitloss = []
+    
+    #Change in Profit dictionary
+    profitchange = []
 
     #Total the Profit/Losses column then write the Date to a dictionary and Profit/Losses to a dictionary
     for row in csvreader:
-        total += float(row['Profit/Losses'])
-        Date = row["Date"]
-        Profit = row["Profit/Losses"]
-        months.append(
-            {"Date": row["Date"]
-            }
-        )
-        profitloss.append(
-           float(row["Profit/Losses"])           
-        )
+        
+        months.append(row[0])
+        profitloss.append(float(row[1]))
 
-    #Use defined function to calculate change in monthly Profit/Losses
-    for eachN in profitloss:
-        change = avgchange(profitloss[0],eachN)/len(months)
-        #appends list of profitloss to profitchange dictionry
-        changes = avgchange(profitloss[0],eachN)
-        profitchange.append(
-            changes
-        )
-    #Set the decimal two places
-    change = "%.2f" % round(change, 2)
+    #appends list of profitloss to profitchange dictionry
+    for i in range(1,len(profitloss)):
+        profitchange.append(profitloss[i] - profitloss[i-1])
+        #calculates average change
+        changes = round(sum(profitchange)/len(profitchange),2)
+
+        max_change = max(profitchange)
+        max_date = str(months[profitchange.index(max(profitchange))+1])
+        min_change = min(profitchange)
+        min_date = str(months[profitchange.index(min(profitchange))+1])
 
     print("Financial Analysis")
     print("-------------------------------")
     print(f"Total Months: {len(months)}")
-    print(f"Total: ${int(total)}")
-    print(f"Average Change: ${(change)}")
-    #I'm not sure how to capture the date for the min max.
-    #print(profitchange)
-    print(max(profitchange))
-    print(min(profitchange))
-    #print(Greatest Increase in Profits: date and dollars)
-    #print(Greatest Decrease in Profits: date and dollars)
+    print(f"Total: ${int(sum(profitloss))}")
+    print(f"Average Change: ${(changes)}")
+    print(f"Greatest Increase in Profits: {max_date} (${int(max_change)})")
+    print(f"Greatest Decrease in Profits: {min_date} (${int(min_change)})")
 
