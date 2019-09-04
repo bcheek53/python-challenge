@@ -19,7 +19,7 @@ with open(pypoll,newline="") as csvfile:
 
     unique_candidate = []
 
-
+    castvotes = []
   
     for row in csvreader:
         
@@ -27,16 +27,20 @@ with open(pypoll,newline="") as csvfile:
         county.append(row[1])
         candidate.append(row[2])
     
+    print("Election Results")
+    print("--------------------------")
+    print(f"Total Votes: {len(voters)}")
+    print("--------------------------")
 
     for x in candidate: 
         # check if exists in unique_list or not 
         if x not in unique_candidate: 
-            unique_candidate.append(x) 
-            print(candidate.count(x))
-
-
-
-print("Election Results")
-print("--------------------------")
-print(f"Total Votes: {len(voters)}")
-print("--------------------------")
+            unique_candidate.append(x)
+            castvotes.append(candidate.count(x))
+            print(f"{(x)}: {round((candidate.count(x)/len(voters))*100,3)}% ({candidate.count(x)})")
+    
+    max_winner = str(unique_candidate[castvotes.index(max(castvotes))])       
+    
+    print("--------------------------")
+    print(f"Winner: {max_winner}")
+    
