@@ -43,3 +43,14 @@ with open(pybank,newline="") as csvfile:
     print(f"Greatest Increase in Profits: {max_date} (${int(max_change)})")
     print(f"Greatest Decrease in Profits: {min_date} (${int(min_change)})")
 
+fh = open("pybank.txt", "w")
+
+fh.write("Financial Analysis\n"
+        "-------------------------------\n"
+        f"Total Months: {len(months)}\n"
+        f"Total: ${int(sum(profitloss))}\n"
+        f"Average Change: ${(changes)}\n"
+        f"Greatest Increase in Profits: {max_date} (${int(max_change)})\n"
+        f"Greatest Decrease in Profits: {min_date} (${int(min_change)})")
+
+fh.close()
