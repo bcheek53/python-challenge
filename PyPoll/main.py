@@ -21,6 +21,8 @@ with open(pypoll,newline="") as csvfile:
 
     castvotes = []
   
+    candidatedetail = []
+
     for row in csvreader:
         
         voters.append(row[0])
@@ -38,9 +40,24 @@ with open(pypoll,newline="") as csvfile:
             unique_candidate.append(x)
             castvotes.append(candidate.count(x))
             print(f"{(x)}: {round((candidate.count(x)/len(voters))*100,3)}% ({candidate.count(x)})")
-    
+            candidatedetail.append(f"{(x)}: {round((candidate.count(x)/len(voters))*100,3)}% ({candidate.count(x)})")
+
     max_winner = str(unique_candidate[castvotes.index(max(castvotes))])       
     
     print("--------------------------")
     print(f"Winner: {max_winner}")
     
+fh = open("pypoll.txt", "w")
+
+fh.write("Election Results\n"
+        "--------------------------\n"
+        f"Total Votes: {len(voters)}\n"
+        "--------------------------\n")
+
+for i in range(len(candidatedetail)):
+    fh.write(
+            f"{candidatedetail[i]}\n" 
+            )
+fh.write("--------------------------\n"
+        f"Winner: {max_winner}")
+fh.close()
